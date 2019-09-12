@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import java.util.function.Consumer;
 
 @Service
-public class SpiderHelper {
+public abstract class JsoupUtils {
 
-    public String waitRequest(String url) {
+    public static String waitRequest(String url) {
         return waitRequest(url, null);
     }
 
-    public String waitRequest(String url, Consumer<Connection> consumer) {
+    public static String waitRequest(String url, Consumer<Connection> consumer) {
         Exception lastThrown = null;
         for (int retry = 0; retry < 3; retry++) {
             try {
