@@ -26,6 +26,10 @@ public class MessageHelper {
         return listOps.range(keyOfMsgs(moduleName), start, end);
     }
 
+    public Long countModuleMsg(String moduleName) {
+        return listOps.size(keyOfMsgs(moduleName));
+    }
+
     private String keyOfMsgs(String moduleName) {
         return moduleName + ".msgs";
     }

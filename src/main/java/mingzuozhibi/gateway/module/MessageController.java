@@ -2,6 +2,7 @@ package mingzuozhibi.gateway.module;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mingzuozhibi.common.BaseController;
 import mingzuozhibi.gateway.GsonUtils;
@@ -28,9 +29,19 @@ public class MessageController extends BaseController {
             @RequestParam(defaultValue = "50") int pageSize) {
 
         List<String> moduleMsg = messageHelper.findModuleMsg(moduleName, page, pageSize);
+        Long count = messageHelper.countModuleMsg(moduleName);
+
         JsonArray root = new JsonArray();
         moduleMsg.forEach(msg -> root.add(gson.fromJson(msg, JsonObject.class)));
-        return objectResult(root);
+        return objectResult(root, buildPage(page, pageSize, count));
+    }
+
+    public JsonElement buildPage(int currentPage, int pageSize, long totalElements) {
+        JsonObject object = new JsonObject();
+        object.addProperty("currentPage", currentPage);
+        object.addProperty("pageSize", pageSize);
+        object.addProperty("totalElements", totalElements);
+        return object;
     }
 
 }
