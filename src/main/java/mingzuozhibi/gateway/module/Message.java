@@ -1,4 +1,4 @@
-package mingzuozhibi.gateway;
+package mingzuozhibi.gateway.module;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

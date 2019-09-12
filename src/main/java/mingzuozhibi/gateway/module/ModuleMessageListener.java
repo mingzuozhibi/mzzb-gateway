@@ -1,4 +1,4 @@
-package mingzuozhibi.gateway;
+package mingzuozhibi.gateway.module;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
