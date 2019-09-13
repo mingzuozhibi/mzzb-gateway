@@ -1,11 +1,11 @@
-package mingzuozhibi.gateway.module;
+package mingzuozhibi.gateway.message;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mingzuozhibi.common.BaseController;
-import mingzuozhibi.gateway.GsonUtils;
+import mingzuozhibi.gateway.utils.GsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ public class MessageController extends BaseController {
 
     private Gson gson = GsonUtils.getGson();
 
-    @GetMapping("/gateway/moduleMessages/{moduleName}")
+    @GetMapping("/gateway/messages/{moduleName}")
     public String findModuleMessages(
             @PathVariable String moduleName,
             @RequestParam(defaultValue = "1") int page,

@@ -1,5 +1,6 @@
-package mingzuozhibi.gateway.module;
+package mingzuozhibi.gateway.connect;
 
+import mingzuozhibi.gateway.modules.Module;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,14 @@ public class ConnectHelper {
 
     public Optional<String> getModuleAddr(String moduleName) {
         return Optional.ofNullable(valueOps.get(keyOfAddr(moduleName)));
+    }
+
+    public Optional<String> getHttpPrefix(Module module) {
+        return getHttpPrefix(module.getModuleName());
+    }
+
+    public Optional<String> getHttpPrefix(String moduleName) {
+        return getModuleAddr(moduleName).map("http://"::concat);
     }
 
     private String keyOfAddr(String moduleName) {

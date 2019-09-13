@@ -1,20 +1,18 @@
-package mingzuozhibi.gateway;
+package mingzuozhibi.gateway.utils.jsoup;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.springframework.stereotype.Service;
 
 import java.util.function.Consumer;
 
-@Service
 public abstract class JsoupUtils {
 
-    public static String waitRequest(String url) {
+    public static JsoupResponse waitRequest(String url) {
         return waitRequest(url, null);
     }
 
-    public static String waitRequest(String url, Consumer<Connection> consumer) {
-        Exception lastThrown = null;
+    public static JsoupResponse waitRequest(String url, Consumer<Connection> consumer) {
+        JsoupResponse result = new JsoupResponse();
         for (int retry = 0; retry < 3; retry++) {
             try {
                 Connection connection = Jsoup.connect(url)
@@ -23,14 +21,12 @@ public abstract class JsoupUtils {
                 if (consumer != null) {
                     consumer.accept(connection);
                 }
-                return connection.execute().body();
+                result.setContent(connection.execute().body());
             } catch (Exception e) {
-                lastThrown = e;
+                result.addError(e);
             }
         }
-        String format = "Jsoup: 无法获取网页内容[url=%s][message=%s]";
-        String message = String.format(format, url, lastThrown.getMessage());
-        throw new RuntimeException(message, lastThrown);
+        return result;
     }
 
 }

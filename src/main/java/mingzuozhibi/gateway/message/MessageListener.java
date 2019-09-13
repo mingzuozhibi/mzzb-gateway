@@ -1,4 +1,4 @@
-package mingzuozhibi.gateway.module;
+package mingzuozhibi.gateway.message;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -9,18 +9,18 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ConnectListener {
+public class MessageListener {
 
     @Autowired
-    private ConnectHelper connectHelper;
+    private MessageHelper messageHelper;
 
-    @JmsListener(destination = "module.connect")
-    public void moduleConnect(String json) {
+    @JmsListener(destination = "module.message")
+    public void moduleMessage(String json) {
         JsonObject root = new Gson().fromJson(json, JsonObject.class);
         String name = root.get("name").getAsString();
-        String addr = root.get("addr").getAsString();
-        connectHelper.setModuleAddr(name, addr);
-        log.info("JMS <- module.connect [name={}, addr={}]", name, addr);
+        JsonObject data = root.get("data").getAsJsonObject();
+        messageHelper.pushModuleMsg(name, data);
+        log.info("JMS <- module.message [name={}, data={}]", name, data);
     }
 
 }
