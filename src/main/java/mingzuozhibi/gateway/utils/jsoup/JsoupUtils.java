@@ -22,6 +22,7 @@ public abstract class JsoupUtils {
                     consumer.accept(connection);
                 }
                 result.setContent(connection.execute().body());
+                break;
             } catch (Exception e) {
                 result.addError(e);
             }
