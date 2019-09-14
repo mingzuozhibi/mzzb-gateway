@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import mingzuozhibi.common.BaseController;
+import mingzuozhibi.common.model.Result;
 import mingzuozhibi.gateway.utils.GsonUtils;
-import mingzuozhibi.gateway.utils.jsoup.JsoupHelper;
-import mingzuozhibi.gateway.utils.jsoup.JsoupResponse;
+import mingzuozhibi.gateway.utils.JsoupHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,18 +40,17 @@ public class DiscShelfsController extends BaseController {
         }
 
         String uri = String.format("/discShelfs?page=%d&pageSize=%d", page, pageSize);
-        JsoupResponse response = jsoupHelper.waitRequest(DISC_SHELFS, uri);
-        if (response.hasErrors()) {
-            return errorMessage(response.formatError());
+        Result<String> bodyResult = jsoupHelper.waitRequest(DISC_SHELFS, uri);
+        if (bodyResult.isUnfinished()) {
+            return errorMessage(bodyResult.formatError());
         }
 
-        JsonObject result = gson.fromJson(response.getContent(), JsonObject.class);
+        JsonObject result = gson.fromJson(bodyResult.getContent(), JsonObject.class);
         if (result.get("success").getAsBoolean()) {
             matchTracked(result);
         }
         return result.toString();
     }
-
 
     private void matchTracked(JsonObject result) {
         result.get("data").getAsJsonArray().forEach(element -> {
