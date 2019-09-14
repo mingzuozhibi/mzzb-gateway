@@ -6,7 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Module {
-    DISC_SHELFS("mzzb-disc-shelfs");
+    DISC_SHELFS("mzzb-disc-shelfs"),
+    DISC_SPIDER("mzzb-disc-spider");
 
     private String moduleName;
 }

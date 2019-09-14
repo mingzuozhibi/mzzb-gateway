@@ -12,7 +12,7 @@
 
     <groupId>mingzuozhibi</groupId>
     <artifactId>mzzb-gateway</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 
     <name>Mzzb Gateway</name>
     <description>gateway module for mingzuozhibi.com</description>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.mingzuozhibi</groupId>
             <artifactId>mzzb-common</artifactId>
-            <version>0.2.2</version>
+            <version>0.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
