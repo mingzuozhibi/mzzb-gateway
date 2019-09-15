@@ -1,7 +1,7 @@
 <configuration scan="true" scanPeriod="10 seconds">
 
-    <appender name="WEB" class="ch.qos.logback.core.FileAppender">
-        <file>target/web.log</file>
+    <appender name="LOG" class="ch.qos.logback.core.FileAppender">
+        <file>target/log.log</file>
         <append>false</append>
         <encoder>
             <pattern>
@@ -36,7 +36,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>record/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
-            <maxHistory>60</maxHistory>
+            <maxHistory>100</maxHistory>
         </rollingPolicy>
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -45,7 +45,7 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="WEB"/>
+        <appender-ref ref="LOG"/>
         <appender-ref ref="STD"/>
         <appender-ref ref="FILE"/>
     </root>
