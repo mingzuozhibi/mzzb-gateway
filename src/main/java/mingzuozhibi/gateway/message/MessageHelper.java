@@ -17,7 +17,7 @@ public class MessageHelper {
     public void pushModuleMsg(String moduleName, JsonObject data) {
         data.addProperty("acceptOn", Instant.now().toEpochMilli());
         listOps.leftPush(keyOfMsgs(moduleName), data.toString());
-        listOps.trim(keyOfMsgs(moduleName), 0, 999);
+        listOps.trim(keyOfMsgs(moduleName), 0, 4999);
     }
 
     public List<String> findModuleMsg(String moduleName, int page, int pageSize) {

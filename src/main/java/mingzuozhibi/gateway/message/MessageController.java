@@ -23,10 +23,10 @@ public class MessageController extends BaseController {
     private Gson gson = GsonUtils.getGson();
 
     @GetMapping("/gateway/messages/{moduleName}")
-    public String findModuleMessages(
-            @PathVariable String moduleName,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "50") int pageSize) {
+    public String findMessages(
+        @PathVariable String moduleName,
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "50") int pageSize) {
 
         List<String> moduleMsg = messageHelper.findModuleMsg(moduleName, page, pageSize);
         Long count = messageHelper.countModuleMsg(moduleName);
