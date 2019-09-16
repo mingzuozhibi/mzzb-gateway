@@ -25,11 +25,12 @@ public class MessageController extends BaseController {
     @GetMapping("/gateway/messages/{moduleName}")
     public String findMessages(
         @PathVariable String moduleName,
+        @RequestParam(defaultValue = "info") MessageType type,
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "50") int pageSize) {
 
-        List<String> moduleMsg = messageHelper.findModuleMsg(moduleName, page, pageSize);
-        Long count = messageHelper.countModuleMsg(moduleName);
+        List<String> moduleMsg = messageHelper.findModuleMsg(moduleName, type, page, pageSize);
+        Long count = messageHelper.countModuleMsg(moduleName, type);
 
         JsonArray root = new JsonArray();
         moduleMsg.forEach(msg -> root.add(gson.fromJson(msg, JsonObject.class)));
