@@ -1,8 +1,7 @@
-package mingzuozhibi.gateway.utils;
+package mingzuozhibi.gateway.connect;
 
 import mingzuozhibi.common.model.Result;
 import mingzuozhibi.common.spider.SpiderJsoup;
-import mingzuozhibi.gateway.connect.ConnectHelper;
 import mingzuozhibi.gateway.modules.Module;
 import org.jsoup.Connection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Component
-public class JsoupHelper {
+public class ConnectJsoup {
 
     @Autowired
-    private ConnectHelper connectHelper;
+    private ConnectService connectService;
 
     public Result<String> waitRequest(Module module, String uri) {
         return waitRequest(module.getModuleName(), uri);
@@ -31,7 +30,7 @@ public class JsoupHelper {
 
     @SuppressWarnings("unchecked")
     public Result<String> waitRequest(String moduleName, String uri, Consumer<Connection> consumer) {
-        Optional<String> httpPrefix = connectHelper.getHttpPrefix(moduleName);
+        Optional<String> httpPrefix = connectService.getHttpPrefix(moduleName);
         if (!httpPrefix.isPresent()) {
             return Result.ofErrorMessage(moduleName + "服务不可用");
         }

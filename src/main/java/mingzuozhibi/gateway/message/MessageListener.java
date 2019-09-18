@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 public class MessageListener {
 
     @Autowired
-    private MessageHelper messageHelper;
+    private MessageService messageService;
 
     @JmsListener(destination = "module.message")
     public void moduleMessage(String json) {
         JsonObject root = new Gson().fromJson(json, JsonObject.class);
         String name = root.get("name").getAsString();
         JsonObject data = root.get("data").getAsJsonObject();
-        messageHelper.pushModuleMsg(name, data);
-        log.info("JMS <- module.message [name={}, data={}]", name, data);
+        messageService.pushModuleMsg(name, data);
+        log.debug("JMS <- module.message [name={}, data={}]", name, data);
     }
 
 }

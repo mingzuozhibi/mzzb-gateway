@@ -11,7 +11,7 @@ import java.util.List;
 import static mingzuozhibi.gateway.message.MessageType.parse;
 
 @Component
-public class MessageHelper {
+public class MessageService {
 
     @Resource(name = "redisTemplate")
     private ListOperations<String, String> listOps;

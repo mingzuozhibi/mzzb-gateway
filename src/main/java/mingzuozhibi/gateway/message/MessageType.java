@@ -6,6 +6,7 @@ import static mingzuozhibi.common.model.Result.formatErrorCause;
 
 @Slf4j
 enum MessageType {
+
     info, notify, success, warning, danger;
 
     public boolean match(MessageType t) {
@@ -20,4 +21,5 @@ enum MessageType {
             return MessageType.info;
         }
     }
+
 }

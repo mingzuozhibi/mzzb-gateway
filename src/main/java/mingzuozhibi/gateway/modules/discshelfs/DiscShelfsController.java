@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import mingzuozhibi.common.BaseController;
+import mingzuozhibi.common.gson.GsonFactory;
 import mingzuozhibi.common.model.Result;
-import mingzuozhibi.gateway.utils.GsonUtils;
-import mingzuozhibi.gateway.utils.JsoupHelper;
+import mingzuozhibi.gateway.connect.ConnectJsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +22,13 @@ import static mingzuozhibi.gateway.modules.Module.DISC_SHELFS;
 @RestController
 public class DiscShelfsController extends BaseController {
 
+    @Autowired
+    private ConnectJsoup connectJsoup;
+
     @Resource(name = "redisTemplate")
     private SetOperations<String, String> setOps;
 
-    @Autowired
-    private JsoupHelper jsoupHelper;
-
-    private Gson gson = GsonUtils.getGson();
+    private Gson gson = GsonFactory.createGson();
 
     @Transactional
     @GetMapping(value = "/gateway/discShelfs")
@@ -40,7 +40,7 @@ public class DiscShelfsController extends BaseController {
         }
 
         String uri = String.format("/discShelfs?page=%d&pageSize=%d", page, pageSize);
-        Result<String> bodyResult = jsoupHelper.waitRequest(DISC_SHELFS, uri);
+        Result<String> bodyResult = connectJsoup.waitRequest(DISC_SHELFS, uri);
         if (bodyResult.isUnfinished()) {
             return errorMessage(bodyResult.formatError());
         }
