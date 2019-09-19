@@ -14,6 +14,7 @@ public class ConnectListener {
 
     @Autowired
     private JmsMessage jmsMessage;
+
     @Autowired
     private ConnectService connectService;
 
@@ -23,9 +24,8 @@ public class ConnectListener {
         String name = root.get("name").getAsString();
         String addr = root.get("addr").getAsString();
         connectService.setModuleAddr(name, addr);
-        String message = String.format("JMS <- module.connect [name=%s, addr=%s]", name, addr);
-        jmsMessage.sendMsg("notify", message);
-        log.info(message);
+        String format = "JMS <- module.connect [name=%s, addr=%s]";
+        jmsMessage.infoAndSend("notify", String.format(format, name, addr));
     }
 
 }

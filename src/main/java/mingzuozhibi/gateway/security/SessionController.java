@@ -36,7 +36,7 @@ public class SessionController extends BaseController {
         if (StringUtils.isEmpty(req.password)) {
             return errorMessage("密码不能为空");
         }
-        Result<String> bodyResult = jsoup.postRequest(USER_SERVER, "/session/register", gson.toJson(req));
+        Result<String> bodyResult = jsoup.post(USER_SERVER, "/session/register", gson.toJson(req));
         Content content = Content.parse(bodyResult);
         if (!content.isSuccess()) {
             return errorMessage(content.getMessage());
@@ -50,7 +50,7 @@ public class SessionController extends BaseController {
             String token = req.getHeader("X-AUTO-LOGIN");
             if (StringUtils.hasLength(token)) {
                 Result<String> bodyResult = jsoup
-                    .postRequest(USER_SERVER, "/session/token", token);
+                    .post(USER_SERVER, "/session/token", token);
                 if (!bodyResult.isUnfinished()) {
                     Content content = new Content(bodyResult.getContent());
                     if (content.isSuccess()) {
@@ -73,14 +73,14 @@ public class SessionController extends BaseController {
             return errorMessage("密码不能为空");
         }
         Result<String> bodyResult = jsoup
-            .postRequest(USER_SERVER, "/session/login", gson.toJson(req));
+            .post(USER_SERVER, "/session/login", gson.toJson(req));
         Content content = Content.parse(bodyResult);
         if (!content.isSuccess()) {
             return errorMessage(content.getMessage());
         }
-        JsonObject dataObj = content.getObject();
-        setLoggedUser(dataObj.get("user").getAsJsonObject());
-        setAutoLoginToken(res, dataObj.get("token").getAsString());
+        JsonObject root = content.getObject();
+        setLoggedUser(root.get("user").getAsJsonObject());
+        setAutoLoginToken(res, root.get("token").getAsString());
         return objectResult(buildSession());
     }
 

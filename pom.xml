@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.mingzuozhibi</groupId>
             <artifactId>mzzb-common</artifactId>
-            <version>0.3.6-rc4</version>
+            <version>0.3.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

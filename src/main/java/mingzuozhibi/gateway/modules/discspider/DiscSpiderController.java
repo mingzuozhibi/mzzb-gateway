@@ -15,14 +15,12 @@ import static mingzuozhibi.gateway.modules.Module.DISC_SPIDER;
 public class DiscSpiderController extends BaseController {
 
     @Autowired
-    private ConnectJsoup connectJsoup;
+    private ConnectJsoup jsoup;
 
     @Transactional
     @GetMapping(value = "/fetchDisc/{asin}")
     public String fetchDisc(@PathVariable String asin) {
-        Result<String> bodyResult = connectJsoup.waitRequest(DISC_SPIDER, "/fetchDisc/" + asin, connection -> {
-            connection.timeout(60 * 1000);
-        });
+        Result<String> bodyResult = jsoup.getSlow(DISC_SPIDER, "/fetchDisc/" + asin);
         if (bodyResult.isUnfinished()) {
             return errorMessage(bodyResult.formatError());
         }
