@@ -1,12 +1,13 @@
 package mingzuozhibi.gateway.modules.discshelfs;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import mingzuozhibi.common.BaseController;
-import mingzuozhibi.common.model.Result;
-import mingzuozhibi.gateway.utils.GsonUtils;
-import mingzuozhibi.gateway.utils.JsoupHelper;
+import mingzuozhibi.common.gson.GsonFactory;
+import mingzuozhibi.common.model.Content;
+import mingzuozhibi.gateway.connect.ConnectJsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +23,13 @@ import static mingzuozhibi.gateway.modules.Module.DISC_SHELFS;
 @RestController
 public class DiscShelfsController extends BaseController {
 
+    @Autowired
+    private ConnectJsoup jsoup;
+
     @Resource(name = "redisTemplate")
     private SetOperations<String, String> setOps;
 
-    @Autowired
-    private JsoupHelper jsoupHelper;
-
-    private Gson gson = GsonUtils.getGson();
+    private Gson gson = GsonFactory.createGson();
 
     @Transactional
     @GetMapping(value = "/gateway/discShelfs")
@@ -40,20 +41,15 @@ public class DiscShelfsController extends BaseController {
         }
 
         String uri = String.format("/discShelfs?page=%d&pageSize=%d", page, pageSize);
-        Result<String> bodyResult = jsoupHelper.waitRequest(DISC_SHELFS, uri);
-        if (bodyResult.isUnfinished()) {
-            return errorMessage(bodyResult.formatError());
+        Content content = Content.parse(jsoup.get(DISC_SHELFS, uri));
+        if (content.isSuccess()) {
+            matchTracked(content.getArray());
         }
-
-        JsonObject result = gson.fromJson(bodyResult.getContent(), JsonObject.class);
-        if (result.get("success").getAsBoolean()) {
-            matchTracked(result);
-        }
-        return result.toString();
+        return content.getRoot().toString();
     }
 
-    private void matchTracked(JsonObject result) {
-        result.get("data").getAsJsonArray().forEach(element -> {
+    private void matchTracked(JsonArray discShelfs) {
+        discShelfs.forEach(element -> {
             JsonObject discShelf = element.getAsJsonObject();
             discShelf.addProperty("tracked", isTracked(discShelf));
         });

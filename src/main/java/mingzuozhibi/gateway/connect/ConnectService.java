@@ -1,6 +1,5 @@
 package mingzuozhibi.gateway.connect;
 
-import mingzuozhibi.gateway.modules.Module;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +7,7 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 @Component
-public class ConnectHelper {
+public class ConnectService {
 
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOps;
@@ -19,10 +18,6 @@ public class ConnectHelper {
 
     public Optional<String> getModuleAddr(String moduleName) {
         return Optional.ofNullable(valueOps.get(keyOfAddr(moduleName)));
-    }
-
-    public Optional<String> getHttpPrefix(Module module) {
-        return getHttpPrefix(module.getModuleName());
     }
 
     public Optional<String> getHttpPrefix(String moduleName) {

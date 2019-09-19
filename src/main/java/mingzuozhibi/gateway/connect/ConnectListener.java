@@ -14,16 +14,18 @@ public class ConnectListener {
 
     @Autowired
     private JmsMessage jmsMessage;
+
     @Autowired
-    private ConnectHelper connectHelper;
+    private ConnectService connectService;
 
     @JmsListener(destination = "module.connect")
     public void moduleConnect(String json) {
         JsonObject root = new Gson().fromJson(json, JsonObject.class);
         String name = root.get("name").getAsString();
         String addr = root.get("addr").getAsString();
-        connectHelper.setModuleAddr(name, addr);
-        jmsMessage.notify(String.format("JMS <- module.connect [name=%s, addr=%s]", name, addr));
+        connectService.setModuleAddr(name, addr);
+        String format = "JMS <- module.connect [name=%s, addr=%s]";
+        jmsMessage.infoAndSend("notify", String.format(format, name, addr));
     }
 
 }

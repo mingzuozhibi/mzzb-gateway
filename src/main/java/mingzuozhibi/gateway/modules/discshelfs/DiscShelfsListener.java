@@ -28,8 +28,8 @@ public class DiscShelfsListener extends BaseController {
         String name = root.get("name").getAsString();
         String asin = root.get("asin").getAsString();
         setOps.add("disc.track", asin);
-        log.info("JMS <- disc.track [name={}, asin={}]", name, asin);
-        jmsMessage.notify(String.format("JMS <- disc.track [name=%s, asin=%s]", name, asin));
+        String format = "JMS <- disc.track [name=%s, asin=%s]";
+        jmsMessage.infoAndSend("notify", String.format(format, name, asin));
     }
 
 }
