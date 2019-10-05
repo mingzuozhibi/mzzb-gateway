@@ -1,11 +1,9 @@
 package mingzuozhibi.gateway.modules.discshelfs;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import mingzuozhibi.common.BaseController;
-import mingzuozhibi.common.gson.GsonFactory;
 import mingzuozhibi.common.model.Content;
 import mingzuozhibi.gateway.connect.ConnectJsoup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +27,8 @@ public class DiscShelfsController extends BaseController {
     @Resource(name = "redisTemplate")
     private SetOperations<String, String> setOps;
 
-    private Gson gson = GsonFactory.createGson();
-
     @Transactional
-    @GetMapping(value = "/gateway/discShelfs")
+    @GetMapping(value = "/api/gateway/discShelfs")
     public String findAll(@RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "20") int pageSize) {
 
