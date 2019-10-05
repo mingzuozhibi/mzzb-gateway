@@ -20,7 +20,6 @@ public class MessageListener {
         String name = root.get("name").getAsString();
         JsonObject data = root.get("data").getAsJsonObject();
         messageService.pushModuleMsg(name, data);
-        log.debug("JMS <- module.message [name={}, data={}]", name, data);
     }
 
 }

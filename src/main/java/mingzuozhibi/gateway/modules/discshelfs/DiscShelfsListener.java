@@ -25,11 +25,8 @@ public class DiscShelfsListener extends BaseController {
     @JmsListener(destination = "disc.track")
     public void discTrack(String json) {
         JsonObject root = new Gson().fromJson(json, JsonObject.class);
-        String name = root.get("name").getAsString();
-        String asin = root.get("asin").getAsString();
-        setOps.add("disc.track", asin);
-        String format = "JMS <- disc.track [name=%s, asin=%s]";
-        jmsMessage.infoAndSend("notify", String.format(format, name, asin));
+        setOps.add("disc.track", root.get("asin").getAsString());
+        jmsMessage.sendMsgAndLogger("notify", "JMS <- disc.track: " + json);
     }
 
 }

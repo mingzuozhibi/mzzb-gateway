@@ -3,31 +3,39 @@
 ##
 
 # test register
-echo '{"username": "test", "password": "test"}' | http post :9999/gateway/register
+echo '{"username": "test", "password": "test"}' | http post :9999/api/gateway/register
 
 # test register again
-echo '{"username": "test", "password": "test"}' | http post :9999/gateway/register
+echo '{"username": "test", "password": "test"}' | http post :9999/api/gateway/register
 
 # test query
-http :9999/gateway/session
+http :9999/api/gateway/session
 
 # test login
-echo '{"username": "test", "password": "test"}' | http --session /tmp/session.json post :9999/gateway/session
+echo '{"username": "test", "password": "test"}' | http --session /tmp/session.json post :9999/api/gateway/session
 
 # test query with cookies
-http --session /tmp/session.json :9999/gateway/session
+http --session /tmp/session.json :9999/api/gateway/session
 
 # test query without cookies
-http :9999/gateway/session
+http :9999/api/gateway/session
 
 # test logout
-http --session /tmp/session.json delete :9999/gateway/session
+http --session /tmp/session.json delete :9999/api/gateway/session
 
 # test query with cookies
-http --session /tmp/session.json :9999/gateway/session
+http --session /tmp/session.json :9999/api/gateway/session
 
 # test login error password
-echo '{"username": "test", "password": "pass"}' | http post :9999/gateway/session
+echo '{"username": "test", "password": "pass"}' | http post :9999/api/gateway/session
 
 # test login empty password
-echo '{"username": "test", "password": ""}' | http post :9999/gateway/session
+echo '{"username": "test", "password": ""}' | http post :9999/api/gateway/session
+
+# test query with token
+http  :9999/api/gateway/session X-AUTO-LOGIN:439dd398-d57d-4a54-acef-acd6f5d2e30e
+
+# test query with token after logout
+http --session :9999/api/gateway/session X-AUTO-LOGIN:439dd398-d57d-4a54-acef-acd6f5d2e30e
+http --session /tmp/session.json delete :9999/api/gateway/session
+http --session :9999/api/gateway/session X-AUTO-LOGIN:439dd398-d57d-4a54-acef-acd6f5d2e30e

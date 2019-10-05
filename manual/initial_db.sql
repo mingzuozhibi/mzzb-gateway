@@ -1,0 +1,4 @@
+# DROP DATABASE IF EXISTS mzzb_gateway_pro;
+DROP DATABASE IF EXISTS mzzb_gateway_dev;
+CREATE DATABASE IF NOT EXISTS mzzb_gateway_pro CHARSET utf8;
+CREATE DATABASE IF NOT EXISTS mzzb_gateway_dev CHARSET utf8;

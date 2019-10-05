@@ -9,7 +9,7 @@ public enum Module {
 
     DISC_SHELFS("mzzb-disc-shelfs"),
     DISC_SPIDER("mzzb-disc-spider"),
-    USER_SERVER("mzzb-user-server");
+    MZZB_SERVER("mzzb-server");
 
     private String moduleName;
 

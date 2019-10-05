@@ -21,7 +21,7 @@ public class MessageController extends BaseController {
 
     private Gson gson = GsonFactory.createGson();
 
-    @GetMapping("/gateway/messages/{moduleName}")
+    @GetMapping("/api/gateway/messages/{moduleName}")
     public String findMessages(
         @PathVariable String moduleName,
         @RequestParam(defaultValue = "info") MessageType type,
