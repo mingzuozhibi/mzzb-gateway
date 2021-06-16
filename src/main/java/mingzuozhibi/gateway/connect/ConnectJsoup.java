@@ -4,6 +4,7 @@ import mingzuozhibi.common.model.Result;
 import mingzuozhibi.common.spider.SpiderJsoup;
 import mingzuozhibi.gateway.modules.Module;
 import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -35,9 +36,23 @@ public class ConnectJsoup {
     }
 
     public Result<String> getSlow(Module module, String uri) {
-        return waitRequest(module, uri, connection -> {
-            connection.timeout(60 * 1000);
-        });
+        Optional<String> httpPrefix = connectService.getHttpPrefix(module.getModuleName());
+        if (!httpPrefix.isPresent()) {
+            return Result.ofErrorMessage(module.getModuleName() + "服务不可用");
+        }
+        return waitRequestSlow(httpPrefix.get() + uri);
+    }
+
+    public Result<String> waitRequestSlow(String url) {
+        Result<String> result = new Result<>();
+        try {
+            Connection connection = Jsoup.connect(url).ignoreContentType(true);
+            connection.timeout(180 * 1000);
+            result.setContent(connection.execute().body());
+        } catch (Exception e) {
+            result.pushError(e);
+        }
+        return result;
     }
 
     public Result<String> post(Module module, String uri, String body) {
